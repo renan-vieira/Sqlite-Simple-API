@@ -1,0 +1,90 @@
+swagger: '2.0'
+info:
+  description: >-
+    A simple api to put and get persons entities on sqlite database using Flask
+  version: 1.0.0
+  title: Sqlite API
+schemes:
+  - http
+paths:
+  /insert_person:
+    put:
+      consumes:
+        - application/json
+      summary: Inserts a new person entry in database
+      description: >-
+        This endpoint receives the name and cpf of a person and returns his/her entry id as a primary key.
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Person
+          schema:
+            type: object
+            required:
+              - name
+              - cpf
+            properties:
+              name:
+                type: string
+              cpf:
+                type: string
+      responses:
+        '200':
+          description: Person successfuly inserted
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+            
+        '400':
+          description: 'Bad request: Invalid parameters '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /select_person:
+    get:
+      consumes:
+        - application/json
+      summary: Consult a astored person in database
+      description: >-
+        This endpoint receives id of a person entry and returns the register.
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: ID
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: integer
+      responses:
+        '200':
+          description: Person successfuly retrieved
+          schema:
+            type: object
+            properties:
+                name:
+                  type: string
+                cpf:
+                  type: string
+              
+        '400':
+          description: 'Bad request: Invalid parameters '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          message:
+            type: string
+          code:
+            type: string
